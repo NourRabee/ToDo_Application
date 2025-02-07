@@ -4,7 +4,7 @@ import com.example.todoapp.domain.dto.SignInRequest;
 import com.example.todoapp.domain.dto.SignInResponse;
 import com.example.todoapp.domain.dto.SignUpRequest;
 import com.example.todoapp.domain.dto.SignUpResponse;
-import com.example.todoapp.service.UserService;
+import com.example.todoapp.service.interfaces.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

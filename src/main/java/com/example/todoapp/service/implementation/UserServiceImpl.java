@@ -1,4 +1,4 @@
-package com.example.todoapp.service;
+package com.example.todoapp.service.implementation;
 
 import com.example.todoapp.domain.dto.SignInRequest;
 import com.example.todoapp.domain.dto.SignInResponse;
@@ -7,18 +7,20 @@ import com.example.todoapp.domain.dto.SignUpResponse;
 import com.example.todoapp.domain.mapper.UserMapper;
 import com.example.todoapp.domain.model.User;
 import com.example.todoapp.repository.UserRepository;
+import com.example.todoapp.service.interfaces.PasswordService;
+import com.example.todoapp.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordService passwordService;
 
     @Autowired
-    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordService passwordService) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordService passwordService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordService = passwordService;

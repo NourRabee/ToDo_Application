@@ -1,10 +1,10 @@
-package com.example.todoapp.service;
+package com.example.todoapp.service.implementation;
+import com.example.todoapp.service.interfaces.PasswordService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import org.springframework.stereotype.Service;
 
 @Service
-public class PasswordService {
+public class PasswordServiceImpl implements PasswordService {
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
