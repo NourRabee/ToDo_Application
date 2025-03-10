@@ -5,6 +5,7 @@ import com.example.todoapp.domain.dto.SignInResponse;
 import com.example.todoapp.domain.dto.SignUpRequest;
 import com.example.todoapp.domain.dto.SignUpResponse;
 import com.example.todoapp.service.interfaces.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<SignUpResponse> signUp(@RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<SignUpResponse> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         SignUpResponse response = userService.register(signUpRequest);
 
         if(response == null){
@@ -29,7 +30,7 @@ public class UserController {
         }
     }
     @PostMapping("/signin")
-    public ResponseEntity<SignInResponse> SignIn(@RequestBody SignInRequest signInRequest){
+    public ResponseEntity<SignInResponse> SignIn(@Valid @RequestBody SignInRequest signInRequest){
         SignInResponse response = userService.signIn(signInRequest);
 
         if(response == null){
