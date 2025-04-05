@@ -1,9 +1,6 @@
 package com.example.todoapp.service.implementation;
 
-import com.example.todoapp.domain.dto.SignInRequest;
-import com.example.todoapp.domain.dto.SignInResponse;
-import com.example.todoapp.domain.dto.SignUpRequest;
-import com.example.todoapp.domain.dto.SignUpResponse;
+import com.example.todoapp.domain.dto.*;
 import com.example.todoapp.domain.mapper.UserMapper;
 import com.example.todoapp.domain.model.User;
 import com.example.todoapp.repository.UserRepository;
@@ -12,18 +9,26 @@ import com.example.todoapp.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
+    @Autowired
     private final UserRepository userRepository;
+    @Autowired
     private final UserMapper userMapper;
+    @Autowired
     private final PasswordService passwordService;
+    @Autowired
+    private final JWTService jwtService; // Spring automatically creates an instance of JWTService and injects it where you need it.
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordService passwordService) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordService passwordService, JWTService jwtService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordService = passwordService;
+        this.jwtService = jwtService;
     }
 
     public SignUpResponse register(SignUpRequest signUpRequest) {
@@ -44,6 +49,17 @@ public class UserServiceImpl implements UserService {
         if(user == null || !passwordService.validatePassword(signInRequest.getPassword(), user.getHashedPassword())) {
             return null;
         }
-        return new SignInResponse(user.getId());
+        String token = jwtService.generateToken(user.getFullName());
+        return new SignInResponse(token);
     }
+
+    public List<UserResponse> getUsers() {
+
+       List<User> users = userRepository.findAll();
+
+       return userMapper.usersToUserResponses(users);
+
+
+    }
+
 }

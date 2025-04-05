@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SignInResponse {
 
-    private int id;
+    private String JWTToken;
 
-    public SignInResponse(int id) {
-        this.id = id;
+    public SignInResponse(String JWTToken) {
+        this.JWTToken = JWTToken;
     }
 }

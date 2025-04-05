@@ -1,10 +1,15 @@
 package com.example.todoapp.domain.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "users")
 @Entity
@@ -30,6 +35,8 @@ public class User{
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Date updatedAt;
+
+    //Setters and Getters
 
     public Integer getId() {
         return id;

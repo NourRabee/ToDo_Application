@@ -1,13 +1,12 @@
 package com.example.todoapp.controller;
 
-import com.example.todoapp.domain.dto.SignInRequest;
-import com.example.todoapp.domain.dto.SignInResponse;
-import com.example.todoapp.domain.dto.SignUpRequest;
-import com.example.todoapp.domain.dto.SignUpResponse;
+import com.example.todoapp.domain.dto.*;
 import com.example.todoapp.service.interfaces.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -38,6 +37,12 @@ public class UserController {
         }else{
             return ResponseEntity.ok(response);
         }
+
+    }
+    @GetMapping("/users")
+    public List<UserResponse> getUsers(){
+
+        return userService.getUsers();
 
     }
 }
