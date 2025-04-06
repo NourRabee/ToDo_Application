@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
         if(user == null || !passwordService.validatePassword(signInRequest.getPassword(), user.getHashedPassword())) {
             return null;
         }
-        String token = jwtService.generateToken(user.getFullName());
+        String token = jwtService.generateToken(user.getEmail());
         return new SignInResponse(token);
     }
 
