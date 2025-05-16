@@ -10,7 +10,7 @@ public class SignUpRequest {
     @NotBlank(message="Full name cannot be empty")
     private String fullName;
     @NotBlank(message = "Email cannot be blank")
-    @Email(message = "Email should be valid", regexp = "^[A-Za-z0-9+_.-]+@toDo.com")
+    @Email(message = "Email should be valid", regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
     private String email;
     @NotBlank(message = "Password cannot be blank")
     private String password;

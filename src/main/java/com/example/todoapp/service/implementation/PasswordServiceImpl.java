@@ -15,4 +15,5 @@ public class PasswordServiceImpl implements PasswordService {
     public Boolean validatePassword(String password, String hashedPassword){
         return passwordEncoder.matches(password, hashedPassword);
     }
+
 }

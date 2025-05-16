@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity // Enables Spring Security in the application and allows customization of security settings.
-public class SecurityConfig {
+public class SecurityConfig{
 
     @Autowired
     private UserDetailsService userDetailsService; // Spring automatically injects your implementation "MyUserDetailsService".
@@ -34,7 +34,7 @@ public class SecurityConfig {
         return http // for one object I am applying different settings.
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/auth/signin", "/api/auth/signup")// These endpoints are public, meaning anyone can access them without authentication.
+                        .requestMatchers("/api/auth/signin", "/api/auth/signup", "/api/auth/password-reset-request")// These endpoints are public, meaning anyone can access them without authentication.
                         .permitAll()
                         .anyRequest().authenticated()) // All other requests must be authenticated." user-password Authentication "
                 .httpBasic(Customizer.withDefaults())

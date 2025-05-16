@@ -1,5 +1,4 @@
 package com.example.todoapp.service.interfaces;
-
 import org.springframework.stereotype.Service;
 
 @Service

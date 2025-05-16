@@ -1,26 +1,26 @@
 package com.example.todoapp.controller;
 
 import com.example.todoapp.domain.dto.*;
-import com.example.todoapp.service.interfaces.UserService;
+import com.example.todoapp.service.interfaces.AuthService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final UserService userService;
+    private final AuthService authService;
 
-    public AuthController(UserService userService) {
-        this.userService = userService;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
     @PostMapping("/signup")
     public ResponseEntity<SignUpResponse> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
-        SignUpResponse response = userService.register(signUpRequest);
+        SignUpResponse response = authService.register(signUpRequest);
 
         if(response == null){
             throw new IllegalArgumentException("User already exists.");
@@ -30,19 +30,18 @@ public class AuthController {
     }
     @PostMapping("/signin")
     public ResponseEntity<SignInResponse> SignIn(@Valid @RequestBody SignInRequest signInRequest){
-        SignInResponse response = userService.signIn(signInRequest);
+        SignInResponse response = authService.signIn(signInRequest);
 
         if(response == null){
             throw new IllegalArgumentException("Email or Password is incorrect!");
         }else{
             return ResponseEntity.ok(response);
         }
-
     }
-    @GetMapping("/users")
-    public List<UserResponse> getUsers(){
-
-        return userService.getUsers();
-
+    @PostMapping("/password-reset-request")
+        public ResponseEntity<String> resetPasswordRequest(@RequestBody PasswordResetRequest request) throws MessagingException {
+        authService.request_password_reset(request);
+        return ResponseEntity.ok("A verification code has been sent to your email. Please check your inbox to continue.");
     }
+
 }
