@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Setter
@@ -26,20 +26,20 @@ public class PasswordResetToken {
     @Column(nullable = false, unique = true)
     private String token;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime expiresAt;
-    private LocalDateTime updatedAt;
+    private Instant createdAt;
+    private Instant expiresAt;
+    private Instant updatedAt;
 
     private Boolean isUsed;
 
     @PrePersist
     public void onCreate(){
-        this.createdAt = LocalDateTime.now();
-        this.expiresAt = this.createdAt.plusMinutes(10);
-        this.updatedAt = LocalDateTime.now();
+        this.createdAt = Instant.now();
+        this.expiresAt = this.createdAt.plusSeconds(600);
+        this.updatedAt = Instant.now();
     }
     @PreUpdate
     public void onUpdate(){
-        this.updatedAt = LocalDateTime.now();
+        this.updatedAt = Instant.now();
     }
 }
