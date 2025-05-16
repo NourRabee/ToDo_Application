@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+import static com.example.todoapp.Enums.RESET_PASSWORD_TEMPLATE;
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -75,12 +77,8 @@ public class AuthServiceImpl implements AuthService {
         if(user != null){
 
             PasswordResetToken token = createToken(user);
-            String htmlBody = emailService.loadEmailTemplate("password_reset.html")
-                    .replace("{{ full_name }}", user.getFullName())
-                    .replace("{{ reset_code }}", token.getToken())
-                    .replace("{{ project_name }}", "Nour's Todo Application")
-                    .replace("{{ year }}", "2025");
 
+            String htmlBody = emailService.loadEmailTemplate(RESET_PASSWORD_TEMPLATE, token, user);
             emailService.sendEmail(htmlBody, user);
 
         }
