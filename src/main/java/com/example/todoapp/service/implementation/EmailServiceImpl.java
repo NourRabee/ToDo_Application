@@ -1,6 +1,6 @@
 package com.example.todoapp.service.implementation;
 
-import com.example.todoapp.Enums;
+import com.example.todoapp.EmailTemplates;
 import com.example.todoapp.domain.model.PasswordResetToken;
 import com.example.todoapp.domain.model.User;
 import com.example.todoapp.service.interfaces.EmailService;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import static com.example.todoapp.Enums.RESET_PASSWORD_TEMPLATE;
+import static com.example.todoapp.EmailTemplates.RESET_PASSWORD_TEMPLATE;
 
 @Service
 public class EmailServiceImpl implements EmailService{
@@ -23,28 +23,24 @@ public class EmailServiceImpl implements EmailService{
     @Autowired
     private JavaMailSender mailSender;
 
-    private String loadResetPasswordTemplate(Enums templateType){
+    private String loadResetPasswordTemplate(EmailTemplates template,PasswordResetToken token, User user) {
 
         try {
-            ClassPathResource resource = new ClassPathResource("templates/email/" + templateType.getFileName());
-            return new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load email template", e);
-        }
-    }
-    public String loadEmailTemplate(Enums templateType, PasswordResetToken token, User user) {
-
-        String htmlBody = "";
-
-        if (templateType == RESET_PASSWORD_TEMPLATE) {
-            htmlBody = loadResetPasswordTemplate(templateType)
+            ClassPathResource resource = new ClassPathResource("templates/email/" + template.getFileName());
+            return new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8)
                     .replace("{{ full_name }}", user.getFullName())
                     .replace("{{ reset_code }}", token.getToken())
                     .replace("{{ project_name }}", "Nour's Todo Application")
                     .replace("{{ year }}", "2025");
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load email template", e);
         }
+    }
 
-        return htmlBody;
+    public String loadEmailTemplate(EmailTemplates template, PasswordResetToken token, User user) {
+        return switch (template) {
+            case RESET_PASSWORD_TEMPLATE -> loadResetPasswordTemplate(template, token, user);
+        };
     }
 
     @Override

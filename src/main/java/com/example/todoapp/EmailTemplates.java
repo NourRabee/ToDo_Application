@@ -1,11 +1,11 @@
 package com.example.todoapp;
 
-public enum Enums {
+public enum EmailTemplates{
     RESET_PASSWORD_TEMPLATE("password_reset.html");
 
     private final String fileName;
 
-    Enums(String fileName) {
+    EmailTemplates(String fileName) {
         this.fileName = fileName;
     }
 

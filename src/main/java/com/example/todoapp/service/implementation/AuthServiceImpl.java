@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-import static com.example.todoapp.Enums.RESET_PASSWORD_TEMPLATE;
+import static com.example.todoapp.EmailTemplates.RESET_PASSWORD_TEMPLATE;
 
 @Service
 public class AuthServiceImpl implements AuthService {
