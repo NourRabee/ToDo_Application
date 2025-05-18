@@ -34,7 +34,7 @@ public class SecurityConfig{
         return http // for one object I am applying different settings.
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/auth/signin", "/api/auth/signup", "/api/auth/password-reset-request", "/api/auth/verify-password-reset-token")// These endpoints are public, meaning anyone can access them without authentication.
+                        .requestMatchers("/api/auth/signin", "/api/auth/signup", "/api/auth/password-reset-request", "/api/auth/verify-password-reset-token", "/api/auth/reset-password")// These endpoints are public, meaning anyone can access them without authentication.
                         .permitAll()
                         .anyRequest().authenticated()) // All other requests must be authenticated." user-password Authentication "
                 .httpBasic(Customizer.withDefaults())

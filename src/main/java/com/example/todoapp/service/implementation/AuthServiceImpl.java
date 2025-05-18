@@ -97,4 +97,19 @@ public class AuthServiceImpl implements AuthService {
         return false;
     }
 
+    @Override
+    public boolean resetPassword(PasswordReset request) {
+
+        User user = userRepository.findByEmail(request.getEmail());
+
+        if(passwordService.validatePassword(request.getNewPassword(),user.getHashedPassword() )){
+
+            return false;
+        }
+        user.setHashedPassword(passwordService.hashPassword(request.getNewPassword()));
+        userRepository.save(user);
+
+        return true;
+    }
+
 }

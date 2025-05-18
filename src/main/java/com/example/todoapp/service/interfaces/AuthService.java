@@ -13,4 +13,6 @@ public interface AuthService {
     void request_password_reset(PasswordResetRequest request) throws MessagingException;
 
     boolean verifyPasswordResetToken(VerifyPasswordResetTokenRequest request);
+
+    boolean resetPassword(PasswordReset request);
 }
