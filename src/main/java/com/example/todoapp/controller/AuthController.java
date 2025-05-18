@@ -59,7 +59,7 @@ public class AuthController {
 
     }
     @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestBody PasswordReset request) {
+    public ResponseEntity<String> resetPassword(@RequestBody PasswordReset request) throws MessagingException {
 
         boolean isResetSuccessful = authService.resetPassword(request);
 

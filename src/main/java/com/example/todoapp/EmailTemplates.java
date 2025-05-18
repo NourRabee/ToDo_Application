@@ -1,7 +1,9 @@
 package com.example.todoapp;
 
 public enum EmailTemplates{
-    RESET_PASSWORD_TEMPLATE("password_reset.html");
+    VERIFICATION_CODE_TEMPLATE("verification_code.html"),
+    PASSWORD_CHANGE_CONFIRMATION_TEMPLATE("password_change_confirmation.html");
+
 
     private final String fileName;
 

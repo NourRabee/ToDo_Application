@@ -16,7 +16,8 @@ import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.example.todoapp.EmailTemplates.RESET_PASSWORD_TEMPLATE;
+import static com.example.todoapp.EmailTemplates.PASSWORD_CHANGE_CONFIRMATION_TEMPLATE;
+import static com.example.todoapp.EmailTemplates.VERIFICATION_CODE_TEMPLATE;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -78,10 +79,10 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(request.getEmail());
         if(user != null){
 
-            PasswordResetToken token = createToken(user);
+            createToken(user);
 
-            String htmlBody = emailService.loadEmailTemplate(RESET_PASSWORD_TEMPLATE, token, user);
-            emailService.sendEmail(htmlBody, user);
+            String htmlBody = emailService.loadEmailTemplate(VERIFICATION_CODE_TEMPLATE, user);
+            emailService.sendEmail(htmlBody, "Your Access Code" ,user);
         }
     }
 
@@ -98,7 +99,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean resetPassword(PasswordReset request) {
+    public boolean resetPassword(PasswordReset request) throws MessagingException {
 
         User user = userRepository.findByEmail(request.getEmail());
 
@@ -108,6 +109,9 @@ public class AuthServiceImpl implements AuthService {
         }
         user.setHashedPassword(passwordService.hashPassword(request.getNewPassword()));
         userRepository.save(user);
+
+        String htmlBody = emailService.loadEmailTemplate(PASSWORD_CHANGE_CONFIRMATION_TEMPLATE, user);
+        emailService.sendEmail(htmlBody, "Your Password Has Been Changed", user);
 
         return true;
     }

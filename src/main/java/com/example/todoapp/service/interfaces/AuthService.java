@@ -14,5 +14,5 @@ public interface AuthService {
 
     boolean verifyPasswordResetToken(VerifyPasswordResetTokenRequest request);
 
-    boolean resetPassword(PasswordReset request);
+    boolean resetPassword(PasswordReset request) throws MessagingException;
 }

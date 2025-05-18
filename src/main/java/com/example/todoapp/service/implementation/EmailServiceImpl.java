@@ -3,6 +3,7 @@ package com.example.todoapp.service.implementation;
 import com.example.todoapp.EmailTemplates;
 import com.example.todoapp.domain.model.PasswordResetToken;
 import com.example.todoapp.domain.model.User;
+import com.example.todoapp.repository.PasswordResetTokenRepository;
 import com.example.todoapp.service.interfaces.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -15,15 +16,14 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import static com.example.todoapp.EmailTemplates.RESET_PASSWORD_TEMPLATE;
-
 @Service
 public class EmailServiceImpl implements EmailService{
 
     @Autowired
     private JavaMailSender mailSender;
+    private PasswordResetTokenRepository passwordResetTokenRepository;
 
-    private String loadResetPasswordTemplate(String filename,PasswordResetToken token, User user) {
+    private String loadVerificationCodeTemplate(String filename, PasswordResetToken token, User user) {
 
         try {
             ClassPathResource resource = new ClassPathResource("templates/email/" + filename);
@@ -37,18 +37,35 @@ public class EmailServiceImpl implements EmailService{
         }
     }
 
-    public String loadEmailTemplate(EmailTemplates template, PasswordResetToken token, User user) {
+    private String loadPasswordChangeConfirmationTemplate(String filename, User user){
+
+        try {
+            ClassPathResource resource = new ClassPathResource("templates/email/" + filename);
+            return new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8)
+                    .replace("{{ full_name }}", user.getFullName());
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load email template", e);
+        }
+    }
+
+    public String loadEmailTemplate(EmailTemplates template, User user) {
         return switch (template) {
-            case RESET_PASSWORD_TEMPLATE -> loadResetPasswordTemplate(template.getFileName(), token, user);
+            case VERIFICATION_CODE_TEMPLATE -> {
+                PasswordResetToken token = passwordResetTokenRepository.findTopByUserOrderByCreatedAtDesc(user);
+                yield loadVerificationCodeTemplate(template.getFileName(), token, user);
+            }
+            case PASSWORD_CHANGE_CONFIRMATION_TEMPLATE ->
+                    loadPasswordChangeConfirmationTemplate(template.getFileName(), user);
+
         };
     }
 
     @Override
-    public void sendEmail(String htmlBody, User user) throws MessagingException {
+    public void sendEmail(String htmlBody, String subject, User user) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true,"UTF-8");
         helper.setTo(user.getEmail());
-        helper.setSubject("Your Access Code");
+        helper.setSubject(subject);
         helper.setText(htmlBody, true);
         mailSender.send(message);
 
