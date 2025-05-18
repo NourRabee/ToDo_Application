@@ -23,10 +23,10 @@ public class EmailServiceImpl implements EmailService{
     @Autowired
     private JavaMailSender mailSender;
 
-    private String loadResetPasswordTemplate(EmailTemplates template,PasswordResetToken token, User user) {
+    private String loadResetPasswordTemplate(String filename,PasswordResetToken token, User user) {
 
         try {
-            ClassPathResource resource = new ClassPathResource("templates/email/" + template.getFileName());
+            ClassPathResource resource = new ClassPathResource("templates/email/" + filename);
             return new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8)
                     .replace("{{ full_name }}", user.getFullName())
                     .replace("{{ reset_code }}", token.getToken())
@@ -39,7 +39,7 @@ public class EmailServiceImpl implements EmailService{
 
     public String loadEmailTemplate(EmailTemplates template, PasswordResetToken token, User user) {
         return switch (template) {
-            case RESET_PASSWORD_TEMPLATE -> loadResetPasswordTemplate(template, token, user);
+            case RESET_PASSWORD_TEMPLATE -> loadResetPasswordTemplate(template.getFileName(), token, user);
         };
     }
 

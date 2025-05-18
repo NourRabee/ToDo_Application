@@ -11,4 +11,6 @@ public interface AuthService {
     SignInResponse signIn(SignInRequest signInRequest);
 
     void request_password_reset(PasswordResetRequest request) throws MessagingException;
+
+    boolean verifyPasswordResetToken(VerifyPasswordResetTokenRequest request);
 }

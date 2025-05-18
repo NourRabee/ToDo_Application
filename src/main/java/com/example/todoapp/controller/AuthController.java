@@ -44,4 +44,16 @@ public class AuthController {
         return ResponseEntity.ok("A verification code has been sent to your email. Please check your inbox to continue.");
     }
 
+    @PostMapping("/verify-password-reset-token")
+        public ResponseEntity<String> verifyPasswordResetToken(@RequestBody VerifyPasswordResetTokenRequest request){
+
+            boolean verified = authService.verifyPasswordResetToken(request);
+
+            if(verified){
+                return ResponseEntity.ok("The verification code is valid. You may now reset your password.");
+            }
+            return ResponseEntity.badRequest().body("The verification code is invalid or has expired. Please request a new one.");
+
+    }
+
 }

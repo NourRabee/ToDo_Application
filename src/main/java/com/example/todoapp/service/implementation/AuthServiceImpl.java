@@ -12,6 +12,8 @@ import com.example.todoapp.service.interfaces.AuthService;
 import jakarta.mail.MessagingException;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.example.todoapp.EmailTemplates.RESET_PASSWORD_TEMPLATE;
@@ -80,9 +82,19 @@ public class AuthServiceImpl implements AuthService {
 
             String htmlBody = emailService.loadEmailTemplate(RESET_PASSWORD_TEMPLATE, token, user);
             emailService.sendEmail(htmlBody, user);
-
         }
+    }
 
+    @Override
+    public boolean verifyPasswordResetToken(VerifyPasswordResetTokenRequest request) {
+        Optional<PasswordResetToken> token = passwordResetTokenRepository.findByTokenAndUserEmail(request.getToken(), request.getEmail());
+
+        if(token.isPresent() && (token.get().getIsUsed() == false) && Instant.now().isBefore(token.get().getExpiresAt())){
+                token.get().setIsUsed(true);
+                passwordResetTokenRepository.save(token.get());
+            return true;
+        }
+        return false;
     }
 
 }
